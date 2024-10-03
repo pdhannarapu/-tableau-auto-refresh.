@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Embed Tableau Dashboard</title>
+    <!-- Link to Tableau's JavaScript API -->
+    <script type="text/javascript" src="https://public.tableau.com/javascripts/api/tableau-2.min.js"></script>
+</head>
+<body>
+    <!-- This is where the Tableau dashboard will be displayed -->
+    <div id="vizContainer" style="width:100%; height:800px;"></div>
+
+    <!-- Embed and auto-refresh functionality using JavaScript -->
+    <script type="text/javascript">
+        const tableauWorkbookUrl = "https://prod-useast-a.online.tableau.com/views/RealTimeSubmissions/RealTimeSubmissions?:iid=2"; // Replace with your Tableau dashboard URL
+
+        let viz; // Tableau Viz object
+
+        // Initialize the Tableau visualization
+        function initViz() {
+            const containerDiv = document.getElementById("vizContainer");
+            const options = {
+                hideTabs: true,     // Hides tabs (if your workbook has multiple sheets)
+                hideToolbar: true,  // Hides toolbar to make the UI cleaner
+                width: '100%',      // Set the width of the visualization
+                height: '800px',    // Set the height of the visualization
+            };
+
+            // Create a new Tableau Viz (visualization) object in the container
+            viz = new tableau.Viz(containerDiv, tableauWorkbookUrl, options);
+        }
+
+        // Function to refresh the Tableau dashboard every 5 minutes
+        function refreshViz() {
+            if (viz) {
+                viz.refreshDataAsync().then(() => {
+                    console.log("Dashboard data refreshed successfully.");
+                }).catch(error => {
+                    console.error("Error during refresh: ", error);
+                });
+            }
+        }
+
+        // Call the initialization function to load the Tableau dashboard
+        initViz();
+
+        // Set an interval to refresh the dashboard every 5 minutes (300000 milliseconds)
+        setInterval(refreshViz, 300000); // 5 minutes
+    </script>
+</body>
+</html>
