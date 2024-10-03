@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Refresh Tableau</title>
+    <script type="text/javascript" src="https://public.tableau.com/javascripts/api/tableau-2.min.js"></script>
+</head>
+<body>
+    <div id="vizContainer" style="width:100%; height:800px;"></div>
+
+    <script type="text/javascript">
+        const tableauWorkbookUrl = "https://prod-useast-a.online.tableau.com/#/site/3000marcusavelakesuccess/views/RealTimeSubmissions/RealTimeSubmissions?:iid=1"; // Paste your Tableau workbook URL here
+
+        let viz;
+
+        function initViz() {
+            const containerDiv = document.getElementById("vizContainer");
+            const options = {
+                hideTabs: true,
+                hideToolbar: true,
+            };
+            viz = new tableau.Viz(containerDiv, tableauWorkbookUrl, options);
+        }
+
+        function refreshViz() {
+            if (viz) {
+                viz.refreshDataAsync().then(() => {
+                    console.log("Workbook refreshed.");
+                }).catch(error => {
+                    console.error("Error refreshing: ", error);
+                });
+            }
+        }
+
+        initViz();
+        setInterval(refreshViz, 300000); // 5 minutes
+    </script>
+</body>
+</html>
